@@ -35,6 +35,7 @@ class DistanceCalculator
 			return null;
 		}
 
+		/** @var list<array{lat: string, lon: string}>|null $data */
 		$data = json_decode($json, true);
 		if (empty($data)) {
 			return null;
@@ -61,14 +62,15 @@ class DistanceCalculator
 			return null;
 		}
 
+		/** @var array{routes: list<array{distance: float, duration: float}>} $data */
 		$data = json_decode($json, true);
 		if (empty($data['routes'])) {
 			return null;
 		}
 
 		return [
-			'distance' => round($data['routes'][0]['distance'] / 1000, 1),
-			'duration' => (int) round($data['routes'][0]['duration'] / 60),
+			'distance' => round((float) $data['routes'][0]['distance'] / 1000, 1),
+			'duration' => (int) round((float) $data['routes'][0]['duration'] / 60),
 		];
 	}
 
@@ -116,13 +118,13 @@ class DistanceCalculator
 			CURLOPT_RETURNTRANSFER => true,
 			CURLOPT_TIMEOUT => 5,
 			CURLOPT_FOLLOWLOCATION => true,
-			CURLOPT_USERAGENT => $this->userAgent,
+			CURLOPT_USERAGENT => $this->userAgent ?: 'NDistance/1.0',
 			CURLOPT_SSL_VERIFYPEER => true,
 		]);
 		$result = curl_exec($ch);
 		$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		curl_close($ch);
 
-		return ($result !== false && $httpCode === 200) ? $result : null;
+		return (is_string($result) && $httpCode === 200) ? $result : null;
 	}
 }
