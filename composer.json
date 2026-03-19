@@ -1,0 +1,9 @@
+{
+    "name": "jansuchanek/ndistance",
+    "description": "Geocoding + driving distance via Nominatim/OSRM — no API key needed",
+    "type": "library",
+    "license": "MIT",
+    "require": {"php": ">=8.1", "ext-curl": "*"},
+    "require-dev": {"nette/tester": "^2.6"},
+    "autoload": {"psr-4": {"NDistance\\": "src/"}}
+}
